@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+
 import prisma from '@/libs/prisma';
 
 export async function GET() {
@@ -9,6 +10,7 @@ export async function GET() {
         nama: true,
       },
     });
+
     const rekapData = await prisma.tes_rekap.findMany({
       select: {
         kode_wilayah: true,
@@ -19,7 +21,9 @@ export async function GET() {
     });
 
     rekapData.forEach(item => {
+
       const kabupaten = kabupatenData.find(kab => kab.id === item.kode_wilayah);
+
       item.nama_kabupaten = kabupaten?.nama || '';
     });
 
@@ -34,8 +38,11 @@ export async function GET() {
     console.log(result);
 
     return NextResponse.json(result);
+
   } catch (error) {
+    
     console.error(error);
+
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
